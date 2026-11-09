@@ -94,6 +94,51 @@
     .tile.show{ background:#6A1B9A; text-decoration:none; }
     .tile.soon{ background:#fff; color:#555; border-style:dashed; min-height:72px; cursor:default; }
     .tile.soon .t-name{ font-size:1.15rem; color:#333; }
+    .tile.goals{ background:#1565C0; }
+    .goal-list{ display:flex; flex-direction:column; gap:10px; }
+    .goal-row{ display:flex; align-items:center; gap:12px; width:100%; text-align:left; background:#fff; border:4px solid var(--border); border-radius:16px; padding:12px 14px; min-height:72px; }
+    .goal-row .g-name{ display:block; font-size:1.15rem; font-weight:900; line-height:1.2; }
+    .goal-row .g-sub{ display:block; font-size:.9rem; font-weight:800; color:#444; margin-top:2px; }
+    .goal-row .arrow{ margin-left:auto; font-size:1.6rem; font-weight:900; }
+    .g-card{ background:#fff; border:4px solid var(--border); border-radius:16px; padding:10px 14px; margin-bottom:12px; }
+    .g-card .g-name{ font-size:1.2rem; font-weight:900; line-height:1.2; }
+    .g-card .g-sub{ display:flex; justify-content:space-between; align-items:baseline; margin-top:4px; font-weight:800; color:#444; }
+    .g-card .g-sub b{ font-size:1.4rem; color:#111; }
+    .strip{ display:grid; grid-template-columns:repeat(10, minmax(0,1fr)); gap:4px; margin-bottom:12px; }
+    .strip i{ height:36px; border:3px solid #5E8A2C; border-radius:8px; background:#A5D46B; display:flex; align-items:center; justify-content:center; font-style:normal; font-weight:900; font-size:.95rem; }
+    .strip i.ok{ background:var(--plus); border-color:#000; color:#fff; }
+    .strip i.help{ background:#FFF1B8; border-color:#000; color:#111; }
+    .strip i.no{ background:var(--minus); border-color:#000; color:#fff; }
+    .strip i.next{ background:#fff; border:3px dashed #000; }
+    .ans{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px; }
+    .ans button{ min-height:130px; border:4px solid var(--border); border-radius:18px; color:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; }
+    .ans .big-mark{ font-size:3.4rem; font-weight:900; line-height:1; }
+    .ans .lab{ font-size:1.15rem; font-weight:900; }
+    .ans .yes{ background:var(--plus); } .ans .no{ background:var(--minus); }
+    .help-label{ font-weight:900; color:#173404; margin:4px 2px 6px; }
+    .helps{ display:grid; grid-template-columns:repeat(5, minmax(0,1fr)); border:4px solid var(--border); border-radius:14px; overflow:hidden; background:#fff; margin-bottom:12px; }
+    .helps button{ border:0; border-left:3px solid #000; background:#fff; min-height:54px; font-weight:900; font-size:.95rem; padding:0 2px; line-height:1.05; }
+    .helps button:first-child{ border-left:0; }
+    .helps button[aria-pressed="true"]{ background:#111; color:#fff; }
+    .helps.big button{ min-height:84px; font-size:1.05rem; }
+    .stats{ display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:6px; text-align:center; background:#fff; border:4px solid var(--border); border-radius:16px; padding:8px; }
+    .stats b{ display:block; font-size:1.4rem; font-weight:900; }
+    .stats span{ font-size:.8rem; font-weight:800; color:#444; }
+    .counter{ display:grid; grid-template-columns:96px 1fr 96px; border:4px solid var(--border); border-radius:18px; overflow:hidden; background:#fff; min-height:130px; margin-bottom:12px; }
+    .counter .num{ display:flex; align-items:center; justify-content:center; font-size:3.2rem; font-weight:900; font-variant-numeric:tabular-nums; }
+    .clock{ background:#fff; border:4px solid var(--border); border-radius:18px; text-align:center; padding:16px; margin-bottom:12px; }
+    .clock .num{ font-size:3.4rem; font-weight:900; font-variant-numeric:tabular-nums; }
+    .clock button{ margin-top:8px; width:100%; }
+    .go-btn{ background:var(--plus); color:#fff; } .stop-btn{ background:var(--minus); color:#fff; }
+    .check-wrap{ position:fixed; inset:0; z-index:30; background:rgba(0,0,0,.45); display:flex; align-items:flex-end; }
+    .check-wrap[hidden]{ display:none; }
+    .check{ width:100%; max-width:560px; margin:0 auto; background:var(--yellow); border-top:5px solid #000; border-radius:24px 24px 0 0; padding:16px 16px calc(20px + env(safe-area-inset-bottom,0px)); display:flex; flex-direction:column; gap:10px; }
+    .check .saved{ background:#fff; border:4px solid #000; border-radius:14px; padding:8px 12px; font-weight:900; }
+    .check .q-goal{ font-weight:900; color:#0D47A1; font-size:.95rem; }
+    .check .q{ font-size:1.6rem; font-weight:900; line-height:1.15; }
+    .check .big{ min-height:62px; }
+    .check .b-yes{ background:#2E7D32; color:#fff; } .check .b-help{ background:#1565C0; color:#fff; } .check .b-no{ background:#fff; }
+    .check .skip{ border:0; background:transparent; font-weight:800; text-decoration:underline; min-height:44px; }
     .soon-label{ font-weight:900; color:#173404; margin:8px 2px 0; }
     .msg{ background:#fff; border:4px solid var(--border); border-radius:16px; padding:16px; font-weight:800; text-align:center; }
     .toast{
@@ -131,10 +176,13 @@
       </button>
       <a class="tile show" href="pocket-kit.html">
         <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="8" height="14" rx="2"/><rect x="13" y="5" width="8" height="14" rx="2"/></svg>
-        <span><span class="t-name">Visuals</span><span class="t-sub">Pocket Kit: timer, first/then, choices, cards</span></span>
+        <span><span class="t-name">Show a student</span><span class="t-sub">Pocket Kit: timer, first/then, choices, cards</span></span>
       </a>
+      <button class="tile goals" id="tileGoals">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"/></svg>
+        <span><span class="t-name">Take goal data</span><span class="t-sub">Mark each try</span></span>
+      </button>
       <p class="soon-label">Coming soon</p>
-      <div class="tile soon" aria-disabled="true"><span><span class="t-name">Take goal data</span><span class="t-sub">Mark each try</span></span></div>
       <div class="tile soon" aria-disabled="true"><span><span class="t-name">Daily checklist</span><span class="t-sub">When you arrive and before you leave</span></span></div>
     </div>
   </main>
@@ -145,6 +193,23 @@
     <div class="grid" id="studentGrid"></div>
     <div class="msg" id="studentsMsg" hidden></div>
   </main>
+
+  <!-- Goals for one student -->
+  <main id="screenGoalList" hidden>
+    <p class="hint">Pick a goal</p>
+    <div class="goal-list" id="goalList"></div>
+  </main>
+
+  <!-- Taking data on one goal -->
+  <main id="screenGoal" hidden>
+    <div id="goalBody"></div>
+  </main>
+  <footer id="goalFooter" hidden>
+    <div class="actions">
+      <button class="big cancel" id="btnUndo">Oops, undo</button>
+      <button class="big submit" id="btnFinish" disabled>Finish &amp; save</button>
+    </div>
+  </footer>
 
   <!-- Screen 2: behaviors for one student -->
   <main id="screenBehaviors" hidden>
@@ -165,6 +230,17 @@
       <button class="big submit" id="btnSubmit" disabled>Submit</button>
     </div>
   </footer>
+</div>
+<div class="check-wrap" id="checkWrap" hidden>
+  <div class="check" role="dialog" aria-modal="true" aria-labelledby="checkQ">
+    <div class="saved" id="checkSaved"></div>
+    <div class="q-goal" id="checkGoal"></div>
+    <div class="q" id="checkQ"></div>
+    <button class="big b-yes" data-a="I">Yes, by themselves</button>
+    <button class="big b-help" data-a="H">Yes, after I helped</button>
+    <button class="big b-no" data-a="N">No</button>
+    <button class="skip" data-a="S">Skip for now</button>
+  </div>
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -227,9 +303,10 @@ async function loadStudents(){
 
 /* ---------- screens ---------- */
 function show(screen){
-  ["screenWho", "screenHome", "screenStudents", "screenBehaviors"].forEach(id => $(id).hidden = id !== screen);
+  ["screenWho", "screenHome", "screenStudents", "screenBehaviors", "screenGoalList", "screenGoal"].forEach(id => $(id).hidden = id !== screen);
   $("behaviorFooter").hidden = screen !== "screenBehaviors";
-  $("btnBack").hidden = !(screen === "screenBehaviors" || screen === "screenStudents");
+  $("goalFooter").hidden = screen !== "screenGoal";
+  $("btnBack").hidden = !["screenBehaviors", "screenStudents", "screenGoalList", "screenGoal"].includes(screen);
   $("btnWho").hidden = screen !== "screenHome";
   screenNow = screen;
   window.scrollTo(0, 0);
@@ -244,16 +321,21 @@ function inkFor(hex){
   return L > .35 ? "#111" : "#fff";
 }
 
+let pickFor = "behavior"; // which tool the student grid is for
 function renderStudents(){
   const grid = $("studentGrid");
   grid.innerHTML = "";
-  students.forEach(s => {
+  const list = pickFor === "goal" ? students.filter(s => (s.goals || []).length) : students;
+  if (pickFor === "goal" && students.length && !list.length) {
+    grid.innerHTML = '<div class="msg" style="grid-column:1/-1">No goals are set up yet. Mr. Tucker adds them on the Goals tab of the Sheet.</div>';
+  }
+  list.forEach(s => {
     const b = document.createElement("button");
     b.className = "student";
     b.style.background = s.color;
     b.style.color = inkFor(s.color);
     b.textContent = s.initials;
-    b.addEventListener("click", () => openStudent(s));
+    b.addEventListener("click", () => pickFor === "goal" ? openGoalList(s) : openStudent(s));
     grid.appendChild(b);
   });
   if (!students.length && $("studentsMsg").hidden) {
@@ -342,7 +424,7 @@ function setMode(m){
 
 function pendingItems(){
   const items = [];
-  if (!current) return items;
+  if (!current || screenNow !== "screenBehaviors") return items;
   current.behaviors.forEach(b => {
     if (tally[b].count) items.push({ s: current.initials, b, n: tally[b].count, t: "count" });
     if (tally[b].min) items.push({ s: current.initials, b, n: tally[b].min, t: "min" });
@@ -358,7 +440,17 @@ function leave(){
 
 function goHome(){
   current = null;
+  pickFor = "behavior";
   $("title").textContent = "Log a behavior";
+  renderStudents();
+  show("screenStudents");
+}
+
+function goGoalStudents(){
+  current = null; G = null;
+  pickFor = "goal";
+  $("title").textContent = "Take goal data";
+  renderStudents();
   show("screenStudents");
 }
 
@@ -380,10 +472,174 @@ async function submit(){
   const params = { action: "log", by: store.get("parachute:by") || "", items: JSON.stringify(items) };
   if (when) params.at = when;
   enqueue(params);
-  const who = current.initials;
+  const s = current;
+  const linked = (s.goals || []).filter(g => g.linked && items.some(it => it.b.toLowerCase() === g.linked.toLowerCase()));
   goHome();
-  toast("✓ Saved for " + who, true);
   if (navigator.vibrate) navigator.vibrate(40);
+  if (linked.length) askLinked(s, linked, items);
+  else toast("✓ Saved for " + s.initials, true);
+}
+
+/* ---------- after a linked behavior: did they use their replacement skill? ---------- */
+let checkQueue = [];
+function askLinked(s, goals, items){
+  checkQueue = goals.map(g => ({ s, g }));
+  const names = [...new Set(items.map(it => it.b))].join(", ");
+  $("checkSaved").textContent = "✓ " + names + " saved for " + s.initials;
+  nextCheck();
+}
+function nextCheck(){
+  const c = checkQueue[0];
+  if (!c) { $("checkWrap").hidden = true; return; }
+  $("checkGoal").textContent = c.s.initials + "’s goal: " + c.g.goal;
+  $("checkQ").textContent = "Did " + c.s.initials + " do it?";
+  $("checkWrap").hidden = false;
+}
+$("checkWrap").addEventListener("click", e => {
+  const b = e.target.closest("[data-a]"); if (!b) return;
+  const c = checkQueue.shift(); if (!c) return;
+  const a = b.dataset.a;
+  if (a !== "S") {
+    const t = a === "N" ? { ok: false, h: "" } : { ok: true, h: a };
+    saveGoal(c.s, c.g, [t], 0);
+    toast("✓ Saved", true);
+  }
+  nextCheck();
+});
+
+/* ---------- goal data ---------- */
+const HELP = [["I", "None"], ["G", "Point"], ["V", "Tell"], ["M", "Show"], ["P", "Hands on"]];
+const TYPE_TEXT = { correct: "Got it / Not yet", correcthelp: "Got it / Not yet + help", help: "How much help", yesno: "Yes / No", count: "Count", duration: "Time" };
+let G = null; // the goal being worked on
+
+function openGoalList(s){
+  current = s; G = null;
+  $("title").innerHTML = "";
+  const chip = document.createElement("span");
+  chip.className = "chip"; chip.style.background = s.color; chip.style.color = inkFor(s.color); chip.textContent = s.initials;
+  $("title").append(chip, document.createTextNode(" Goals"));
+  const list = $("goalList"); list.innerHTML = "";
+  s.goals.forEach(g => {
+    const b = document.createElement("button");
+    b.className = "goal-row";
+    const sub = ["correct", "correcthelp", "help", "yesno"].includes(g.type) ? g.tries + " tries" : TYPE_TEXT[g.type];
+    b.innerHTML = '<span><span class="g-name"></span><span class="g-sub"></span></span><span class="arrow" aria-hidden="true">›</span>';
+    b.querySelector(".g-name").textContent = g.goal;
+    b.querySelector(".g-sub").textContent = sub;
+    b.addEventListener("click", () => openGoal(g));
+    list.appendChild(b);
+  });
+  show("screenGoalList");
+}
+
+function openGoal(g){
+  G = { g, tries: [], help: "I", n: 0, running: false, startMs: 0, baseSecs: 0, tick: null };
+  $("toast").classList.remove("show");
+  renderGoal();
+  show("screenGoal");
+}
+
+const isTrials = t => ["correct", "correcthelp", "help", "yesno"].includes(t);
+function goalHasData(){ return G && (G.tries.length > 0 || G.n > 0 || G.running || G.baseSecs > 0); }
+function secsNow(){ return G.baseSecs + (G.running ? Math.floor((Date.now() - G.startMs) / 1000) : 0); }
+const mmss = x => Math.floor(x / 60) + ":" + String(x % 60).padStart(2, "0");
+
+function renderGoal(){
+  const { g } = G, body = $("goalBody");
+  const t = g.type;
+  let html = '<div class="g-card"><div class="g-name"></div><div class="g-sub"><span>' + TYPE_TEXT[t] + '</span>' +
+    (isTrials(t) ? '<b>Try ' + Math.min(G.tries.length + 1, Math.max(g.tries, G.tries.length + 1)) + ' <span style="font-size:.9rem;color:#444">of ' + g.tries + '</span></b>' : '') + '</div></div>';
+  if (isTrials(t)) {
+    const n = Math.max(g.tries, G.tries.length);
+    html += '<div class="strip" style="grid-template-columns:repeat(' + Math.min(10, n) + ', minmax(0,1fr))">';
+    for (let i = 0; i < n; i++) {
+      const x = G.tries[i];
+      if (!x) html += '<i class="' + (i === G.tries.length ? "next" : "") + '"></i>';
+      else if (!x.ok) html += '<i class="no">✗</i>';
+      else if (x.h && x.h !== "I") html += '<i class="help">✓</i>';
+      else html += '<i class="ok">✓</i>';
+    }
+    html += '</div>';
+  }
+  if (t === "correct" || t === "correcthelp") {
+    if (t === "correcthelp") {
+      html += '<div class="help-label">How much help did you give?</div><div class="helps" id="helps">' +
+        HELP.map(h => '<button data-h="' + h[0] + '" aria-pressed="' + (G.help === h[0]) + '">' + h[1] + '</button>').join("") + '</div>';
+    }
+    html += '<div class="ans"><button class="yes" data-t="ok"><span class="big-mark">✓</span><span class="lab">Got it</span></button><button class="no" data-t="no"><span class="big-mark">✗</span><span class="lab">Not yet</span></button></div>';
+  } else if (t === "help") {
+    html += '<div class="help-label">Tap how much help you gave for this try</div><div class="helps big" id="helps">' +
+      HELP.map(h => '<button data-h="' + h[0] + '" data-tap="1">' + h[1] + '</button>').join("") + '</div>';
+  } else if (t === "yesno") {
+    html += '<div class="ans"><button class="yes" data-t="ok"><span class="big-mark">✓</span><span class="lab">Yes</span></button><button class="no" data-t="no"><span class="big-mark">✗</span><span class="lab">No</span></button></div>';
+  } else if (t === "count") {
+    html += '<div class="counter"><button class="pm minus" data-c="-1" aria-label="Take one away">−</button><div class="num">' + G.n + '</div><button class="pm plus" data-c="1" aria-label="Add one">+</button></div>';
+  } else if (t === "duration") {
+    const x = secsNow();
+    html += '<div class="clock"><div class="num" id="clockNum">' + mmss(x) + '</div><button class="big ' + (G.running ? "stop-btn" : "go-btn") + '" data-clock="1">' + (G.running ? "Stop" : (x ? "Keep going" : "Start")) + '</button></div>';
+  }
+  if (isTrials(t) && G.tries.length) {
+    const got = G.tries.filter(x => x.ok).length, alone = G.tries.filter(x => x.ok && (!x.h || x.h === "I")).length;
+    const pct = v => Math.round(v / G.tries.length * 100) + "%";
+    html += '<div class="stats"><div><b>' + pct(got) + '</b><span>Got it</span></div>' +
+      (t === "correcthelp" || t === "help" ? '<div><b>' + pct(alone) + '</b><span>No help</span></div>' : '<div></div>') +
+      '<div><b>' + G.tries.length + '</b><span>Tries done</span></div></div>';
+  }
+  body.innerHTML = html;
+  body.querySelector(".g-name").textContent = g.goal;
+  $("btnFinish").disabled = !(G.tries.length || G.n > 0 || G.running || secsNow() > 0);
+  $("btnUndo").disabled = !(G.tries.length || G.n > 0 || (!G.running && G.baseSecs > 0));
+}
+
+$("goalBody").addEventListener("click", e => {
+  if (!G) return;
+  const b = e.target.closest("button"); if (!b) return;
+  const t = G.g.type;
+  if (b.dataset.h && !b.dataset.tap) { G.help = b.dataset.h; renderGoal(); return; }
+  if (b.dataset.tap) { G.tries.push({ ok: b.dataset.h === "I", h: b.dataset.h }); }
+  else if (b.dataset.t) {
+    const ok = b.dataset.t === "ok";
+    G.tries.push({ ok, h: t === "correcthelp" ? G.help : "" });
+    G.help = "I"; // next try starts at "None"
+  }
+  else if (b.dataset.c) { G.n = Math.max(0, Math.min(999, G.n + Number(b.dataset.c))); }
+  else if (b.dataset.clock) {
+    if (G.running) { G.baseSecs = secsNow(); G.running = false; clearInterval(G.tick); }
+    else { G.running = true; G.startMs = Date.now(); G.tick = setInterval(() => { const el = $("clockNum"); if (el) el.textContent = mmss(secsNow()); }, 500); }
+  } else return;
+  if (navigator.vibrate) navigator.vibrate(15);
+  renderGoal();
+});
+
+$("btnUndo").addEventListener("click", () => {
+  if (!G) return;
+  if (isTrials(G.g.type)) G.tries.pop();
+  else if (G.g.type === "count") G.n = Math.max(0, G.n - 1);
+  else if (G.g.type === "duration" && !G.running) G.baseSecs = 0;
+  renderGoal();
+});
+
+function saveGoal(s, g, tries, n){
+  enqueue({ action: "goal", by: store.get("parachute:by") || "", item: JSON.stringify({ s: s.initials, g: g.goal, type: g.type, tries, n }) });
+}
+
+$("btnFinish").addEventListener("click", () => {
+  if (!G) return;
+  if (G.running) { G.baseSecs = secsNow(); G.running = false; clearInterval(G.tick); }
+  const n = G.g.type === "duration" ? G.baseSecs : G.n;
+  saveGoal(current, G.g, isTrials(G.g.type) ? G.tries : [], n);
+  const s = current;
+  G = null;
+  openGoalList(s);
+  toast("✓ Saved for " + s.initials, true);
+  if (navigator.vibrate) navigator.vibrate(40);
+});
+
+function leaveGoal(){
+  if (goalHasData() && !confirm("Throw away this data? It hasn't been saved. Tap Finish & save to keep it.")) return;
+  if (G && G.tick) clearInterval(G.tick);
+  const s = current; G = null;
+  openGoalList(s);
 }
 
 /* ---------- outbox: entries saved on the phone until the Sheet confirms them ---------- */
@@ -478,7 +734,13 @@ function renderStaff(){
 }
 $("btnWho").addEventListener("click", () => show("screenWho"));
 
-$("btnBack").addEventListener("click", () => screenNow === "screenStudents" ? goLaunch() : leave());
+$("btnBack").addEventListener("click", () => {
+  if (screenNow === "screenStudents") goLaunch();
+  else if (screenNow === "screenBehaviors") leave();
+  else if (screenNow === "screenGoalList") goGoalStudents();
+  else if (screenNow === "screenGoal") leaveGoal();
+});
+$("tileGoals").addEventListener("click", goGoalStudents);
 $("tileBehavior").addEventListener("click", goHome);
 $("btnCancel").addEventListener("click", leave);
 $("btnSubmit").addEventListener("click", submit);
@@ -496,7 +758,7 @@ setInterval(() => { renderPending(); sendOutbox(); }, 20000);
 $("whenInput").addEventListener("change", () => document.querySelector(".when").classList.add("edited"));
 $("modeCount").addEventListener("click", () => setMode("count"));
 $("modeTime").addEventListener("click", () => setMode("min"));
-window.addEventListener("beforeunload", e => { if (pendingItems().length) { e.preventDefault(); e.returnValue = ""; } });
+window.addEventListener("beforeunload", e => { if (pendingItems().length || goalHasData()) { e.preventDefault(); e.returnValue = ""; } });
 
 // Start: show cached students instantly, then refresh from the Sheet
 const by = store.get("parachute:by");
