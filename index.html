@@ -91,6 +91,7 @@
     .tile .t-name{ display:block; font-size:1.45rem; font-weight:900; line-height:1.1; }
     .tile .t-sub{ display:block; font-size:.95rem; font-weight:800; opacity:.92; margin-top:2px; }
     .tile.behavior{ background:#D93025; }
+    .tile.show{ background:#6A1B9A; text-decoration:none; }
     .tile.soon{ background:#fff; color:#555; border-style:dashed; min-height:72px; cursor:default; }
     .tile.soon .t-name{ font-size:1.15rem; color:#333; }
     .soon-label{ font-weight:900; color:#173404; margin:8px 2px 0; }
@@ -128,8 +129,11 @@
         <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>
         <span><span class="t-name">Log a behavior</span><span class="t-sub">Count it with + and −</span></span>
       </button>
+      <a class="tile show" href="pocket-kit.html">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="8" height="14" rx="2"/><rect x="13" y="5" width="8" height="14" rx="2"/></svg>
+        <span><span class="t-name">Show a student</span><span class="t-sub">Pocket Kit: timer, first/then, choices, cards</span></span>
+      </a>
       <p class="soon-label">Coming soon</p>
-      <div class="tile soon" aria-disabled="true"><span><span class="t-name">Show a student</span><span class="t-sub">Timer, first/then, choices, cards</span></span></div>
       <div class="tile soon" aria-disabled="true"><span><span class="t-name">Take goal data</span><span class="t-sub">Mark each try</span></span></div>
       <div class="tile soon" aria-disabled="true"><span><span class="t-name">Daily checklist</span><span class="t-sub">When you arrive and before you leave</span></span></div>
     </div>
@@ -167,7 +171,7 @@
 <script>
 // ---- Connection (filled in once; the aides never see or change this) ----
 // After deploying Code.gs as a web app, paste its URL between the quotes on the next line.
-const ENDPOINT = "PASTE_WEB_APP_URL_HERE";
+const ENDPOINT = "https://script.google.com/macros/s/AKfycbz3MkE3Ev39aRMZK9lkbcgRvSjt1HKmcz75D-PAJa-YOL0qQvZnkIs-2yK8IxQj3bs/exec";
 const KEY = "skhqdkxwzat0zmt2qg"; // must match KEY in Code.gs
 
 const $ = id => document.getElementById(id);
@@ -231,6 +235,15 @@ function show(screen){
   window.scrollTo(0, 0);
 }
 
+// Light colors (like yellow) get black initials so they stay readable
+function inkFor(hex){
+  const m = /^#?([0-9a-f]{6})$/i.exec(String(hex || "").trim());
+  if (!m) return "#fff";
+  const n = parseInt(m[1], 16), ch = [n >> 16 & 255, n >> 8 & 255, n & 255].map(v => { v /= 255; return v <= .03928 ? v / 12.92 : Math.pow((v + .055) / 1.055, 2.4); });
+  const L = .2126 * ch[0] + .7152 * ch[1] + .0722 * ch[2];
+  return L > .35 ? "#111" : "#fff";
+}
+
 function renderStudents(){
   const grid = $("studentGrid");
   grid.innerHTML = "";
@@ -238,6 +251,7 @@ function renderStudents(){
     const b = document.createElement("button");
     b.className = "student";
     b.style.background = s.color;
+    b.style.color = inkFor(s.color);
     b.textContent = s.initials;
     b.addEventListener("click", () => openStudent(s));
     grid.appendChild(b);
@@ -267,6 +281,7 @@ function openStudent(s){
   const chip = document.createElement("span");
   chip.className = "chip";
   chip.style.background = s.color;
+  chip.style.color = inkFor(s.color);
   chip.textContent = s.initials;
   $("title").appendChild(chip);
   renderRows();
