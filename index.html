@@ -166,8 +166,9 @@
 
 <script>
 // ---- Connection (filled in once; the aides never see or change this) ----
-const ENDPOINT = "https://script.google.com/macros/s/AKfycbwMJRoN3d60kIpNjXKR8R5JaXz8LMoPqK3ZKd0DNr9fp-c1proAJVMU0M5JLVlQJoPO0A/exec";
-const KEY = "y7nkjobi14jz78w5";
+// After deploying Code.gs as a web app, paste its URL between the quotes on the next line.
+const ENDPOINT = "PASTE_WEB_APP_URL_HERE";
+const KEY = "skhqdkxwzat0zmt2qg"; // must match KEY in Code.gs
 
 const $ = id => document.getElementById(id);
 const store = {
@@ -183,6 +184,7 @@ let screenNow = "";
 
 /* ---------- talking to the Sheet ---------- */
 async function request(params){
+  if (!ENDPOINT.startsWith("https://")) throw new Error("not-set-up");
   const url = new URL(ENDPOINT);
   Object.entries({ ...params, key: KEY }).forEach(([k, v]) => url.searchParams.set(k, v));
   let res;
@@ -208,7 +210,11 @@ async function loadStudents(){
   } catch (err) {
     if (!students.length) {
       $("studentsMsg").hidden = false;
-      $("studentsMsg").textContent = "Can't load students. Check the internet connection and reopen the app.";
+      $("studentsMsg").textContent = !ENDPOINT.startsWith("https://")
+        ? "Not connected to the Google Sheet yet. Mr. Tucker needs to finish setup."
+        : err.message === "bad-key"
+          ? "The connection key doesn't match the Sheet. Mr. Tucker needs to check setup."
+          : "Can't load students. Check the internet connection and reopen the app.";
     }
   }
   renderStudents();
