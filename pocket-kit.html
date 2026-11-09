@@ -273,7 +273,14 @@ button,.secondary,.primary,.chip,.tool,.sym,.back{font-weight:900}
   background:#FFD54F; border-bottom:5px solid #000;
   display:flex; align-items:center; gap:10px; min-height:62px; position:sticky; top:0; z-index:6;
 }
-#home .pc-top{margin-bottom:auto}
+#home.active{justify-content:flex-start}
+#home .pc-top{margin-bottom:16px}
+.home-head{margin-top:4px}
+/* category buttons wrap onto a second line instead of running off the edge */
+.cats{flex-wrap:wrap;overflow-x:visible;flex:none;padding:2px 2px 12px}
+.cats .chip{flex:none;padding:8px 14px;min-height:44px;line-height:1.2}
+.pc-search{margin:0 0 10px;font-weight:700;flex:none}
+.pc-search::placeholder{color:#555}
 html,body{overflow-x:hidden}
 .bar h2{font-size:22px;font-weight:900;color:#111}
 .back{border:3px solid #000;background:#fff;color:#111;border-radius:12px;padding:6px 12px;font-size:16px;min-height:44px}
@@ -435,6 +442,7 @@ h3{color:#173404;font-weight:900}
   <div class="bar"><button class="back">‹ Tools</button><h2>Cards</h2></div>
   <div class="row-actions" style="margin:0 0 12px"><button class="secondary pc-teacher-only" id="cNew">+ New card</button><button class="secondary pc-teacher-only" id="cEdit">Edit cards</button></div>
   <p class="hint-line" id="cHint" hidden>Tap a card to add a real photo, change its picture, or delete it.</p>
+  <input class="text-in pc-search" id="cardSearch" type="search" placeholder="Search cards" autocomplete="off" aria-label="Search cards">
   <div class="cats" id="cardCats"></div>
   <div class="grid" id="cardGrid"></div>
 </section>
@@ -506,6 +514,7 @@ h3{color:#173404;font-weight:900}
 <div id="sheetWrap" hidden>
   <div id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
     <div class="sheet-head"><h2 id="sheetTitle">Pick a picture</h2><button class="back" id="sheetClose">Close</button></div>
+    <input class="text-in pc-search" id="sheetSearch" type="search" placeholder="Search pictures" autocomplete="off" aria-label="Search pictures">
     <div class="cats" id="sheetCats"></div>
     <div class="grid" id="sheetGrid"></div>
   </div>
@@ -706,17 +715,32 @@ renderPrefs();
 
 /* ---------- picker sheet ---------- */
 let pickCb = null, pickCat = 'dir';
+/* search across every category by name */
+function searchItems(q) {
+  q = q.trim().toLowerCase(); const seen = new Set(), out = [];
+  for (const c of catList(true)) for (const it of itemsFor(c.id)) {
+    if (seen.has(it.ref) || !it.label.toLowerCase().includes(q)) continue;
+    seen.add(it.ref); out.push(it);
+  }
+  return out.sort((a, b) => (b.label.toLowerCase().startsWith(q)) - (a.label.toLowerCase().startsWith(q)));
+}
+const noMatch = q => `<p class="empty" style="grid-column:1/-1">Nothing called “${esc(q.trim())}”. Try another word.</p>`;
+
 function openPicker(cb, startCat) {
   pickCb = cb; pickCat = startCat || pickCat;
   if (!catList().some(c => c.id === pickCat)) pickCat = 'dir';
+  $('#sheetSearch').value = '';
   renderPicker(); $('#sheetWrap').hidden = false;
 }
 function closePicker() { $('#sheetWrap').hidden = true; pickCb = null; }
 function catList(all) { return (all || S.custom.some(x => x.cat === 'mine')) ? [...LIB, MINE] : LIB; }
 function renderPicker() {
-  $('#sheetCats').innerHTML = catList().map(c => `<button class="chip" data-c="${c.id}" aria-pressed="${c.id === pickCat}">${c.name}</button>`).join('');
-  $('#sheetGrid').innerHTML = itemsFor(pickCat).map(it => `<button class="sym" data-ref="${it.ref}">${symArt(it)}<span>${esc(it.label)}</span></button>`).join('');
+  const q = $('#sheetSearch').value;
+  $('#sheetCats').innerHTML = catList().map(c => `<button class="chip" data-c="${c.id}" aria-pressed="${!q.trim() && c.id === pickCat}">${c.name}</button>`).join('');
+  const items = q.trim() ? searchItems(q) : itemsFor(pickCat);
+  $('#sheetGrid').innerHTML = items.length ? items.map(it => `<button class="sym" data-ref="${it.ref}">${symArt(it)}<span>${esc(it.label)}</span></button>`).join('') : noMatch(q);
 }
+$('#sheetSearch').addEventListener('input', renderPicker);
 function itemsFor(cat) {
   const refs = [];
   const c = LIB.find(x => x.id === cat);
@@ -724,7 +748,7 @@ function itemsFor(cat) {
   S.custom.filter(x => x.cat === cat).forEach(x => refs.push('c:' + x.id));
   return refs.map(ref => { const sym = getSym(ref); return sym ? Object.assign({ref}, sym) : null; }).filter(Boolean);
 }
-$('#sheetCats').addEventListener('click', e => { const b = e.target.closest('[data-c]'); if (!b) return; pickCat = b.dataset.c; renderPicker(); });
+$('#sheetCats').addEventListener('click', e => { const b = e.target.closest('[data-c]'); if (!b) return; pickCat = b.dataset.c; $('#sheetSearch').value = ''; renderPicker(); });
 $('#sheetGrid').addEventListener('click', e => { const b = e.target.closest('[data-ref]'); if (!b || !pickCb) return; const cb = pickCb; closePicker(); cb(b.dataset.ref); });
 $('#sheetClose').onclick = closePicker;
 $('#sheetWrap').addEventListener('click', e => { if (e.target.id === 'sheetWrap') closePicker(); });
@@ -926,15 +950,17 @@ $('#cGo').onclick = () => {
 let editMode = false;
 function renderCards() {
   if (!catList().some(c => c.id === S.cardsCat)) S.cardsCat = 'dir';
-  $('#cardCats').innerHTML = catList().map(c => `<button class="chip" data-c="${c.id}" aria-pressed="${c.id === S.cardsCat}">${c.name}</button>`).join('');
+  const q = $('#cardSearch').value;
+  $('#cardCats').innerHTML = catList().map(c => `<button class="chip" data-c="${c.id}" aria-pressed="${!q.trim() && c.id === S.cardsCat}">${c.name}</button>`).join('');
   $('#cEdit').textContent = editMode ? 'Done editing' : 'Edit cards';
   $('#cHint').hidden = !editMode;
-  const items = itemsFor(S.cardsCat);
+  const items = q.trim() ? searchItems(q) : itemsFor(S.cardsCat);
   $('#cardGrid').innerHTML = items.length ? items.map(it =>
     `<button class="sym" data-ref="${it.ref}">${symArt(it)}<span>${esc(it.label)}</span>${editMode && hasReal(it.ref) ? '<span class="badge" aria-hidden="true">📷</span>' : ''}${editMode ? '<span class="x pen" aria-hidden="true">✎</span>' : ''}</button>`).join('')
-    : `<p class="empty" style="grid-column:1/-1">No cards here yet. Tap “+ New card” to add one.</p>`;
+    : q.trim() ? noMatch(q) : `<p class="empty" style="grid-column:1/-1">No cards here yet.</p>`;
 }
-$('#cardCats').addEventListener('click', e => { const b = e.target.closest('[data-c]'); if (!b) return; S.cardsCat = b.dataset.c; save(); renderCards(); });
+$('#cardSearch').addEventListener('input', renderCards);
+$('#cardCats').addEventListener('click', e => { const b = e.target.closest('[data-c]'); if (!b) return; S.cardsCat = b.dataset.c; $('#cardSearch').value = ''; save(); renderCards(); });
 $('#cardGrid').addEventListener('click', e => {
   const b = e.target.closest('[data-ref]'); if (!b) return;
   const ref = b.dataset.ref;
