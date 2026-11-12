@@ -139,6 +139,80 @@
     .check .big{ min-height:62px; }
     .check .b-yes{ background:#2E7D32; color:#fff; } .check .b-help{ background:#1565C0; color:#fff; } .check .b-no{ background:#fff; }
     .check .skip{ border:0; background:transparent; font-weight:800; text-decoration:underline; min-height:44px; }
+    .tgts{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px; }
+    .tgts button{ border:3px solid #000; background:#fff; border-radius:999px; min-height:48px; padding:0 16px; font-weight:900; font-size:1.05rem; }
+    .tgts button[aria-pressed="true"]{ background:#111; color:#fff; }
+    .strip i small{ font-size:.6rem; font-weight:900; display:block; line-height:1; overflow:hidden; max-width:100%; white-space:nowrap; }
+    .pick-grid{ display:flex; flex-wrap:wrap; gap:8px; }
+    .pick-grid button{ border:4px solid #000; background:#fff; border-radius:14px; min-height:56px; padding:0 18px; font-weight:900; font-size:1.1rem; }
+    .tile.link{ background:#BF360C; text-decoration:none; }
+    .tile.link .ext{ margin-left:auto; font-size:1.4rem; font-weight:900; }
+    #linkTiles:empty{ display:none; }
+    .tile.mydata{ background:#111; }
+    .d-top{ display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:12px; }
+    .d-top .when{ font-weight:800; color:#173404; }
+    .d-btn{ border:3px solid #000; background:#fff; border-radius:12px; min-height:44px; padding:0 14px; font-weight:900; }
+    .d-h{ font-size:1.25rem; font-weight:900; margin:16px 2px 8px; color:#111; }
+    .flag{ background:#fff; border:4px solid #000; border-left-width:12px; border-radius:14px; padding:10px 12px; margin-bottom:8px; display:flex; gap:10px; align-items:flex-start; }
+    .flag .who, .s-card .who{ flex:none; border:3px solid #000; border-radius:999px; padding:2px 10px; font-weight:900; font-size:.9rem; }
+    .flag .what{ font-weight:800; line-height:1.3; }
+    .flag .tag{ display:block; font-size:.75rem; font-weight:900; letter-spacing:.04em; text-transform:uppercase; margin-bottom:2px; }
+    .flag.up{ border-left-color:#D93025; } .flag.up .tag{ color:#B3261E; }
+    .flag.stuck{ border-left-color:#E65100; } .flag.stuck .tag{ color:#A84300; }
+    .flag.pattern{ border-left-color:#6A1B9A; } .flag.pattern .tag{ color:#6A1B9A; }
+    .flag.quiet{ border-left-color:#757575; } .flag.quiet .tag{ color:#555; }
+    .flag.mastered{ border-left-color:#2E7D32; } .flag.mastered .tag{ color:#1E6B2E; }
+    .flag.down{ border-left-color:#1565C0; } .flag.down .tag{ color:#0D47A1; }
+    .s-card{ background:#fff; border:4px solid #000; border-radius:16px; margin-bottom:10px; overflow:hidden; }
+    .s-card summary{ list-style:none; display:flex; align-items:center; gap:10px; padding:10px 12px; min-height:52px; font-weight:900; font-size:1.15rem; cursor:pointer; }
+    .s-card summary::-webkit-details-marker{ display:none; }
+    .s-card summary .chev{ margin-left:auto; }
+    .s-card[open] summary .chev{ transform:rotate(90deg); }
+    .s-body{ border-top:3px solid #000; padding:8px 12px 12px; }
+    .s-sub{ font-weight:900; color:#173404; margin:8px 0 4px; }
+    .s-row{ display:flex; align-items:center; gap:10px; padding:6px 0; border-bottom:1px solid #ddd; }
+    .s-row:last-child{ border-bottom:0; }
+    .s-row .nm{ flex:1; font-weight:800; line-height:1.2; }
+    .s-row .nm small{ display:block; font-weight:700; color:#555; }
+    .s-row .num{ font-weight:900; font-variant-numeric:tabular-nums; text-align:right; min-width:64px; }
+    .s-row svg{ flex:none; }
+    .empty-note{ color:#333; font-weight:700; }
+    .d-actions{ display:flex; flex-wrap:wrap; gap:8px; margin:4px 0 8px; }
+    #printArea{ display:none; }
+    @media print{
+      @page{ margin:0.5in; }
+      body.printing{ background:#fff !important; }
+      body.printing > *:not(#printArea){ display:none !important; }
+      body.printing #printArea{ display:block; }
+      #printArea{ -webkit-print-color-adjust:exact; print-color-adjust:exact; color:#000; }
+      .p-page{ break-after:page; }
+      .p-page:last-child{ break-after:auto; }
+      .p-head{ display:flex; justify-content:space-between; align-items:flex-end; border-bottom:3px solid #000; padding-bottom:6px; margin-bottom:10px; }
+      .p-name{ font-size:22pt; font-weight:900; }
+      .p-meta{ font-size:9pt; color:#333; font-weight:700; }
+      #printArea .d-card{ border:2px solid #000; border-radius:8px; break-inside:avoid; margin-bottom:10px; }
+      #printArea .d-card svg{ max-height:2.3in; }
+      .p-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; align-items:start; }
+      .p-grid > .d-card:first-child{ grid-column:1 / -1; }
+      .p-grid > .d-card:first-child svg{ max-height:2in; }
+      #printArea .d-card{ margin:0; padding:8px; }
+      #printArea .d-table{ font-size:8pt; }
+      #printArea .d-title{ font-size:11pt; } #printArea .d-big{ font-size:14pt; }
+    }
+    .d-students{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px; }
+    .d-students button{ border:3px solid #000; border-radius:999px; min-height:46px; padding:0 16px; font-weight:900; font-size:1.05rem; opacity:.55; }
+    .d-students button[aria-pressed="true"]{ opacity:1; outline:4px solid #111; outline-offset:2px; }
+    .d-card{ background:#fff; border:4px solid #000; border-radius:16px; padding:12px; margin-bottom:12px; }
+    .d-title{ display:flex; align-items:baseline; justify-content:space-between; gap:8px; font-size:1.15rem; font-weight:900; line-height:1.2; }
+    .d-title small{ font-size:.8rem; color:#555; font-weight:800; margin-left:6px; }
+    .d-big{ font-size:1.6rem; font-weight:900; white-space:nowrap; }
+    .d-sub{ font-size:.85rem; font-weight:800; color:#555; margin:2px 0 6px; }
+    .lg{ display:flex; flex-wrap:wrap; gap:6px 14px; font-size:.85rem; font-weight:800; margin:4px 0 8px; }
+    .lg span{ display:inline-flex; align-items:center; gap:6px; }
+    .d-table{ width:100%; border-collapse:collapse; font-size:.9rem; margin-top:6px; }
+    .d-table th{ text-align:left; font-weight:900; border-bottom:3px solid #000; padding:4px 6px; }
+    .d-table td{ border-bottom:1px solid #ddd; padding:6px; font-weight:700; }
+    .d-table small{ color:#555; }
     .soon-label{ font-weight:900; color:#173404; margin:8px 2px 0; }
     .msg{ background:#fff; border:4px solid var(--border); border-radius:16px; padding:16px; font-weight:800; text-align:center; }
     .toast{
@@ -182,6 +256,11 @@
         <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"/></svg>
         <span><span class="t-name">Take goal data</span><span class="t-sub">Mark each try</span></span>
       </button>
+      <div class="launch" id="linkTiles"></div>
+      <button class="tile mydata" id="tileData" hidden>
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg>
+        <span><span class="t-name">My data</span><span class="t-sub">Charts for each student · teacher PIN</span></span>
+      </button>
       <p class="soon-label">Coming soon</p>
       <div class="tile soon" aria-disabled="true"><span><span class="t-name">Daily checklist</span><span class="t-sub">When you arrive and before you leave</span></span></div>
     </div>
@@ -210,6 +289,11 @@
       <button class="big submit" id="btnFinish" disabled>Finish &amp; save</button>
     </div>
   </footer>
+
+  <!-- Teacher: My data -->
+  <main id="screenMyData" hidden>
+    <div id="dataBody"></div>
+  </main>
 
   <!-- Screen 2: behaviors for one student -->
   <main id="screenBehaviors" hidden>
@@ -242,7 +326,23 @@
     <button class="skip" data-a="S">Skip for now</button>
   </div>
 </div>
+<div class="check-wrap" id="pickWrap" hidden>
+  <div class="check" role="dialog" aria-modal="true" aria-labelledby="pickQ">
+    <div class="q" id="pickQ">What did they pick instead?</div>
+    <div class="pick-grid" id="pickGrid"></div>
+    <button class="skip" id="pickSkip">Skip</button>
+  </div>
+</div>
+<div class="check-wrap" id="pinWrap" hidden>
+  <div class="check" role="dialog" aria-modal="true" aria-labelledby="pinQ">
+    <div class="q" id="pinQ">Teacher PIN</div>
+    <input id="pinIn" type="password" inputmode="numeric" autocomplete="off" style="min-height:56px;border:4px solid #000;border-radius:14px;font-size:1.4rem;padding:0 14px;font-weight:900" aria-label="Teacher PIN">
+    <button class="big b-yes" id="pinGo">Open My data</button>
+    <button class="skip" id="pinCancel">Cancel</button>
+  </div>
+</div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div id="printArea"></div>
 
 <script>
 // ---- Connection (filled in once; the aides never see or change this) ----
@@ -286,6 +386,11 @@ async function loadStudents(){
     staff = data.staff || [];
     store.set("parachute:students", JSON.stringify(students));
     store.set("parachute:staff", JSON.stringify(staff));
+    links = data.links || [];
+    teachers = data.teachers || [];
+    store.set("parachute:teachers", JSON.stringify(teachers));
+    showTeacherTile();
+    store.set("parachute:links", JSON.stringify(links));
     $("studentsMsg").hidden = true;
   } catch (err) {
     if (!students.length) {
@@ -299,14 +404,178 @@ async function loadStudents(){
   }
   renderStudents();
   renderStaff();
+  renderLinks();
 }
+
+/* ---------- launchpad buttons for other apps (from the Links tab) ---------- */
+let links = [];
+try { links = JSON.parse(store.get("parachute:links") || "[]"); } catch (e) { links = []; }
+function renderLinks(){
+  const box = $("linkTiles"); box.innerHTML = "";
+  links.forEach(l => {
+    const a = document.createElement("a");
+    a.className = "tile link";
+    a.href = l.url;
+    a.target = "_blank";       // opens on top, so closing it comes back here
+    a.rel = "noopener";
+    a.innerHTML = '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6"/><path d="M20 4l-9 9"/><path d="M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></svg><span><span class="t-name"></span><span class="t-sub"></span></span>';
+    a.querySelector(".t-name").textContent = l.name;
+    a.querySelector(".t-sub").textContent = l.sub || "Opens in a new window";
+    box.appendChild(a);
+  });
+}
+renderLinks();
+
+/* ---------- My data: teacher only, behind the teacher PIN ---------- */
+let teachers = [];
+try { teachers = JSON.parse(store.get("parachute:teachers") || "[]"); } catch (e) { teachers = []; }
+const PIN_KEY = "parachute:pk:pin"; // same PIN memory as Pocket Kit's teacher unlock
+function showTeacherTile(){ $("tileData").hidden = !teachers.includes(store.get("parachute:by") || ""); }
+showTeacherTile();
+
+$("tileData").addEventListener("click", () => {
+  if (store.get(PIN_KEY)) openMyData();
+  else { $("pinIn").value = ""; $("pinWrap").hidden = false; setTimeout(() => $("pinIn").focus(), 50); }
+});
+$("pinCancel").addEventListener("click", () => { $("pinWrap").hidden = true; });
+$("pinGo").addEventListener("click", async () => {
+  const pin = $("pinIn").value.trim(); if (!pin) return;
+  $("pinGo").disabled = true; $("pinGo").textContent = "Checking…";
+  try {
+    await request({ action: "checkPin", pin });
+    store.set(PIN_KEY, pin); $("pinWrap").hidden = true; openMyData();
+  } catch (e) {
+    toast(e.message === "bad-pin" ? "That PIN isn’t right" : e.message === "no-pin-set" ? "Set TEACHER_PIN in Code.gs first" : "Couldn’t check. Try again with internet.");
+  } finally { $("pinGo").disabled = false; $("pinGo").textContent = "Open My data"; }
+});
+
+function openMyData(){
+  $("toast").classList.remove("show");
+  $("title").textContent = "My data";
+  show("screenMyData");
+  let cached = null; try { cached = JSON.parse(store.get("parachute:mydata") || "null"); } catch (e) {}
+  if (cached) renderMyData(cached, true); else $("dataBody").innerHTML = '<p class="empty-note">Loading…</p>';
+  loadMyData();
+}
+async function loadMyData(){
+  try {
+    const d = await request({ action: "myData", pin: store.get(PIN_KEY) || "" });
+    d.loadedAt = Date.now();
+    store.set("parachute:mydata", JSON.stringify(d));
+    if (screenNow === "screenMyData") renderMyData(d, false);
+  } catch (e) {
+    if (e.message === "bad-pin") { store.set(PIN_KEY, ""); goLaunch(); toast("PIN changed. Tap My data and enter it again."); return; }
+    if (screenNow === "screenMyData") toast("Couldn’t update. Showing what was saved last.");
+  }
+}
+
+const escHtml = t => String(t).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const LINE_STYLES = [["#1565C0", ""], ["#D93025", "6 4"], ["#2E7D32", "2 4"], ["#6A1B9A", "10 4 2 4"], ["#E65100", "4 2"], ["#00838F", "1 3"]];
+const shortDate = d => { const p = String(d).split("-"); return p.length === 3 ? Number(p[1]) + "/" + Number(p[2]) : d; };
+let dataStudent = "";
+
+/* a simple line chart drawn as SVG: labels along the bottom, one line per series */
+function lineChart(labels, series, opts){
+  const W = 340, H = 190, L = 34, R = 10, T = 10, B = 28;
+  const pw = W - L - R, ph = H - T - B;
+  const all = series.flatMap(s => s.values.filter(v => v !== null && v !== undefined));
+  const yMax = opts.yMax || Math.max(4, Math.ceil(Math.max(0, ...all) * 1.15));
+  const n = labels.length;
+  const x = i => L + (n === 1 ? pw / 2 : i * pw / (n - 1));
+  const y = v => T + ph - (v / yMax) * ph;
+  let g = "";
+  const ticks = opts.yMax === 100 ? [0, 25, 50, 75, 100] : [0, Math.round(yMax / 2), yMax];
+  ticks.forEach(t => {
+    g += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + y(t) + '" y2="' + y(t) + '" stroke="#E0E0E0" stroke-width="1"/>';
+    g += '<text x="' + (L - 5) + '" y="' + (y(t) + 4) + '" font-size="10" text-anchor="end" fill="#444">' + t + (opts.unit === "%" ? "%" : "") + '</text>';
+  });
+  if (opts.goalLine) g += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + y(opts.goalLine) + '" y2="' + y(opts.goalLine) + '" stroke="#2E7D32" stroke-dasharray="5 4" stroke-width="1.5"/>' +
+    '<text x="' + (W - R) + '" y="' + (y(opts.goalLine) - 4) + '" font-size="10" text-anchor="end" fill="#1E6B2E" font-weight="700">' + opts.goalLine + '% goal</text>';
+  const every = Math.max(1, Math.ceil(n / 6));
+  labels.forEach((lab, i) => { if (i % every === 0 || i === n - 1) g += '<text x="' + x(i) + '" y="' + (H - 8) + '" font-size="10" text-anchor="middle" fill="#444">' + escHtml(lab) + '</text>'; });
+  g += '<line x1="' + L + '" x2="' + L + '" y1="' + T + '" y2="' + (T + ph) + '" stroke="#999"/>';
+  series.forEach((s, k) => {
+    const [color, dash] = LINE_STYLES[k % LINE_STYLES.length];
+    const pts = s.values.map((v, i) => v === null || v === undefined ? null : [x(i), y(v)]).filter(Boolean);
+    if (!pts.length) return;
+    g += '<path d="' + pts.map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1)).join(" ") + '" fill="none" stroke="' + color + '" stroke-width="2.5"' + (dash ? ' stroke-dasharray="' + dash + '"' : "") + '/>';
+    pts.forEach(p => g += '<circle cx="' + p[0].toFixed(1) + '" cy="' + p[1].toFixed(1) + '" r="3" fill="' + color + '"/>');
+  });
+  return '<svg viewBox="0 0 ' + W + ' ' + H + '" width="100%" role="img" aria-label="' + escHtml(opts.label || "chart") + '">' + g + '</svg>';
+}
+function legend(series){
+  return '<div class="lg">' + series.map((s, k) => { const [c, dash] = LINE_STYLES[k % LINE_STYLES.length];
+    return '<span><svg width="22" height="8" aria-hidden="true"><line x1="0" x2="22" y1="4" y2="4" stroke="' + c + '" stroke-width="3"' + (dash ? ' stroke-dasharray="' + dash + '"' : "") + '/></svg>' + escHtml(s.name) + '</span>'; }).join("") + '</div>';
+}
+
+function renderMyData(d, stale){
+  const list = d.students.filter(s => s.behaviors.length || s.goals.length);
+  if (!list.length) { $("dataBody").innerHTML = '<p class="empty-note">No data yet.</p>'; return; }
+  if (!list.some(s => s.initials === dataStudent)) dataStudent = list[0].initials;
+  const s = list.find(x => x.initials === dataStudent);
+  const when = d.loadedAt ? new Date(d.loadedAt).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }) : "";
+  let html = '<div class="d-top"><span class="when">' + (stale ? "Updating…" : "Updated " + escHtml(when)) + '</span><button class="d-btn" id="dRefresh">Refresh</button></div>';
+  html += '<div class="d-students">' + list.map(x => '<button data-stu="' + escHtml(x.initials) + '" aria-pressed="' + (x.initials === dataStudent) + '" style="background:' + escHtml(x.color) + ';color:' + inkFor(x.color) + '">' + escHtml(x.initials) + '</button>').join("") + '</div>';
+
+  html += studentSection(d, s);
+  html += '<div class="d-actions"><button class="d-btn" id="dPrintOne">Print ' + escHtml(s.initials) + '</button><button class="d-btn" id="dPrintAll">Print all students</button></div>';
+  html += '<button class="d-btn" id="dLock" style="margin-top:6px">Lock My data on this phone</button>';
+  $("dataBody").innerHTML = html;
+  $("dataBody").querySelectorAll("[data-stu]").forEach(b => b.addEventListener("click", () => { dataStudent = b.dataset.stu; renderMyData(d, false); window.scrollTo(0, 0); }));
+  $("dRefresh").addEventListener("click", () => { $("dataBody").querySelector(".when").textContent = "Updating…"; loadMyData(); });
+  $("dLock").addEventListener("click", () => { store.set(PIN_KEY, ""); store.set("parachute:mydata", ""); goLaunch(); toast("Locked"); });
+  $("dPrintOne").addEventListener("click", () => printData(d, [s]));
+  $("dPrintAll").addEventListener("click", () => printData(d, list));
+}
+
+/* one student's charts and tables (used on screen and for printing) */
+function studentSection(d, s){
+  let html = "";
+  // behaviors
+  if (s.behaviors.length) {
+    const labels = d.days.map(shortDate);
+    const series = s.behaviors.map(b => ({ name: b.name + (b.measure === "minutes" ? " (min)" : ""), values: b.values }));
+    html += '<div class="d-card"><div class="d-title">Behaviors <small>per school day, last 4 weeks</small></div>' +
+      lineChart(labels, series, { label: s.initials + " behaviors per day" }) + legend(series);
+    html += '<table class="d-table"><thead><tr><th>Behavior</th><th>This week</th><th>Last week</th></tr></thead><tbody>' +
+      s.behaviors.map(b => { const n = b.values.length, wk = b.values.slice(n - 5).reduce((a, c) => a + c, 0), prev = b.values.slice(n - 10, n - 5).reduce((a, c) => a + c, 0);
+        return '<tr><td>' + escHtml(b.name) + '</td><td>' + wk + (b.measure === "minutes" ? " min" : "") + '</td><td>' + prev + (b.measure === "minutes" ? " min" : "") + '</td></tr>'; }).join("") +
+      '</tbody></table></div>';
+  }
+
+  // goals
+  s.goals.forEach(g => {
+    const ses = g.sessions, last = ses[ses.length - 1];
+    const fmt = v => g.unit === "%" ? v + "%" : v + " " + g.unit;
+    html += '<div class="d-card"><div class="d-title">' + escHtml(g.goal) + '<span class="d-big">' + fmt(last.v) + '</span></div>' +
+      '<div class="d-sub">' + ses.length + ' session' + (ses.length === 1 ? "" : "s") + ' · last ' + shortDate(last.d) + '</div>' +
+      lineChart(ses.map(x => shortDate(x.d)), [{ name: g.goal, values: ses.map(x => x.v) }], { yMax: g.unit === "%" ? 100 : 0, unit: g.unit, goalLine: g.unit === "%" ? 80 : 0, label: g.goal + " by session" }) +
+      '<table class="d-table"><thead><tr><th>Date</th><th>Result</th><th>Tries</th><th>From</th></tr></thead><tbody>' +
+      ses.slice(-5).reverse().map(x => '<tr><td>' + shortDate(x.d) + '</td><td>' + fmt(x.v) + (x.tries ? ' <small>(' + x.got + '/' + x.tries + ')</small>' : "") + '</td><td>' + (x.tries || "–") + '</td><td>' + escHtml(x.src === "The Parachute" ? (x.by || "Parachute") : x.src) + '</td></tr>').join("") +
+      '</tbody></table></div>';
+  });
+  if (!s.goals.length) html += '<p class="empty-note">No goal data for ' + escHtml(s.initials) + ' yet.</p>';
+  return html;
+}
+
+/* print: a clean page per student, with the date range */
+function printData(d, students){
+  const range = shortDate(d.days[0]) + " – " + shortDate(d.days[d.days.length - 1]);
+  const made = new Date(d.loadedAt || Date.now()).toLocaleString([], { month: "short", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit" });
+  $("printArea").innerHTML = students.map(s =>
+    '<section class="p-page"><div class="p-head"><div><div class="p-name">' + escHtml(s.initials) + '</div><div class="p-meta">Behaviors: school days ' + escHtml(range) + ' · Goals: last 30 sessions</div></div>' +
+    '<div class="p-meta" style="text-align:right">The Parachute<br>Printed ' + escHtml(made) + '</div></div><div class="p-grid">' + studentSection(d, s) + '</div></section>').join("");
+  document.body.classList.add("printing");
+  setTimeout(() => window.print(), 50);
+}
+window.addEventListener("afterprint", () => { document.body.classList.remove("printing"); $("printArea").innerHTML = ""; });
 
 /* ---------- screens ---------- */
 function show(screen){
-  ["screenWho", "screenHome", "screenStudents", "screenBehaviors", "screenGoalList", "screenGoal"].forEach(id => $(id).hidden = id !== screen);
+  ["screenWho", "screenHome", "screenStudents", "screenBehaviors", "screenGoalList", "screenGoal", "screenMyData"].forEach(id => $(id).hidden = id !== screen);
   $("behaviorFooter").hidden = screen !== "screenBehaviors";
   $("goalFooter").hidden = screen !== "screenGoal";
-  $("btnBack").hidden = !["screenBehaviors", "screenStudents", "screenGoalList", "screenGoal"].includes(screen);
+  $("btnBack").hidden = !["screenBehaviors", "screenStudents", "screenGoalList", "screenGoal", "screenMyData"].includes(screen);
   $("btnWho").hidden = screen !== "screenHome";
   screenNow = screen;
   window.scrollTo(0, 0);
@@ -457,6 +726,7 @@ function goGoalStudents(){
 function goLaunch(){
   current = null;
   $("title").textContent = "The Parachute";
+  showTeacherTile();
   show("screenHome");
 }
 
@@ -533,7 +803,8 @@ function openGoalList(s){
 }
 
 function openGoal(g){
-  G = { g, tries: [], help: "I", n: 0, running: false, startMs: 0, baseSecs: 0, tick: null };
+  G = { g, tries: [], help: "I", n: 0, running: false, startMs: 0, baseSecs: 0, tick: null,
+        tgt: (g.targets || [])[0] || "" };
   $("toast").classList.remove("show");
   renderGoal();
   show("screenGoal");
@@ -561,6 +832,11 @@ function renderGoal(){
     }
     html += '</div>';
   }
+  const hasTargets = isTrials(t) && (g.targets || []).length > 0;
+  if (hasTargets) {
+    html += '<div class="help-label">Which one are you working on?</div><div class="tgts" id="tgts">' +
+      g.targets.map((x, i) => '<button data-tg="' + i + '" aria-pressed="' + (G.tgt === x) + '"></button>').join("") + '</div>';
+  }
   if (t === "correct" || t === "correcthelp") {
     if (t === "correcthelp") {
       html += '<div class="help-label">How much help did you give?</div><div class="helps" id="helps">' +
@@ -587,6 +863,11 @@ function renderGoal(){
   }
   body.innerHTML = html;
   body.querySelector(".g-name").textContent = g.goal;
+  body.querySelectorAll("[data-tg]").forEach(b => b.textContent = g.targets[+b.dataset.tg]);
+  body.querySelectorAll(".strip i").forEach((el, i) => {
+    const x = G.tries[i];
+    if (x && x.tg) { const sm = document.createElement("small"); sm.textContent = x.tg; el.appendChild(sm); }
+  });
   $("btnFinish").disabled = !(G.tries.length || G.n > 0 || G.running || secsNow() > 0);
   $("btnUndo").disabled = !(G.tries.length || G.n > 0 || (!G.running && G.baseSecs > 0));
 }
@@ -595,12 +876,18 @@ $("goalBody").addEventListener("click", e => {
   if (!G) return;
   const b = e.target.closest("button"); if (!b) return;
   const t = G.g.type;
+  if (b.dataset.tg) { G.tgt = G.g.targets[+b.dataset.tg]; renderGoal(); return; }
   if (b.dataset.h && !b.dataset.tap) { G.help = b.dataset.h; renderGoal(); return; }
-  if (b.dataset.tap) { G.tries.push({ ok: b.dataset.h === "I", h: b.dataset.h }); }
+  const tg = (G.g.targets || []).length ? G.tgt : "";
+  if (b.dataset.tap) { G.tries.push(tg ? { ok: b.dataset.h === "I", h: b.dataset.h, tg } : { ok: b.dataset.h === "I", h: b.dataset.h }); }
   else if (b.dataset.t) {
     const ok = b.dataset.t === "ok";
-    G.tries.push({ ok, h: t === "correcthelp" ? G.help : "" });
+    const tr = { ok, h: t === "correcthelp" ? G.help : "" };
+    if (tg) tr.tg = tg;
+    G.tries.push(tr);
     G.help = "I"; // next try starts at "None"
+    // a miss on a goal with targets: what did they pick instead?
+    if (!ok && t !== "yesno" && tg && G.g.targets.length > 1) askPicked(tr);
   }
   else if (b.dataset.c) { G.n = Math.max(0, Math.min(999, G.n + Number(b.dataset.c))); }
   else if (b.dataset.clock) {
@@ -618,6 +905,20 @@ $("btnUndo").addEventListener("click", () => {
   else if (G.g.type === "duration" && !G.running) G.baseSecs = 0;
   renderGoal();
 });
+
+function askPicked(tr){
+  const grid = $("pickGrid"); grid.innerHTML = "";
+  G.g.targets.filter(x => x !== tr.tg).forEach(x => {
+    const b = document.createElement("button"); b.textContent = x;
+    b.addEventListener("click", () => { tr.pk = x; $("pickWrap").hidden = true; renderGoal(); });
+    grid.appendChild(b);
+  });
+  const other = document.createElement("button"); other.textContent = "Something else";
+  other.addEventListener("click", () => { tr.pk = "Other"; $("pickWrap").hidden = true; renderGoal(); });
+  grid.appendChild(other);
+  $("pickWrap").hidden = false;
+}
+$("pickSkip").addEventListener("click", () => { $("pickWrap").hidden = true; });
 
 function saveGoal(s, g, tries, n){
   enqueue({ action: "goal", by: store.get("parachute:by") || "", item: JSON.stringify({ s: s.initials, g: g.goal, type: g.type, tries, n }) });
@@ -739,6 +1040,7 @@ $("btnBack").addEventListener("click", () => {
   else if (screenNow === "screenBehaviors") leave();
   else if (screenNow === "screenGoalList") goGoalStudents();
   else if (screenNow === "screenGoal") leaveGoal();
+  else if (screenNow === "screenMyData") goLaunch();
 });
 $("tileGoals").addEventListener("click", goGoalStudents);
 $("tileBehavior").addEventListener("click", goHome);
