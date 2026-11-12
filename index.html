@@ -177,10 +177,10 @@
     .s-row .num{ font-weight:900; font-variant-numeric:tabular-nums; text-align:right; min-width:64px; }
     .s-row svg{ flex:none; }
     .empty-note{ color:#333; font-weight:700; }
-    .d-stats{ display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:6px; margin-top:6px; text-align:center; }
+    .d-stats{ display:grid; grid-template-columns:repeat(5, minmax(0,1fr)); gap:6px; margin-top:6px; text-align:center; }
     .d-stats div{ border:3px solid #000; border-radius:12px; padding:6px 2px; }
     .d-stats b{ display:block; font-size:1.4rem; font-weight:900; }
-    .d-stats span{ font-size:.75rem; font-weight:800; color:#444; }
+    .d-stats span{ font-size:.68rem; line-height:1.1; display:block; font-weight:800; color:#444; }
     .d-trips{ margin-top:8px; border-top:3px solid #000; }
     .d-trip{ display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid #ddd; }
     .d-trip .tw{ flex:none; width:48px; font-size:.8rem; font-weight:800; color:#444; line-height:1.2; }
@@ -432,12 +432,19 @@ function renderLinks(){
   links.forEach(l => {
     const a = document.createElement("a");
     a.className = "tile link";
-    a.href = l.url;
-    a.target = "_blank";       // opens on top, so closing it comes back here
-    a.rel = "noopener";
+    let url; try { url = new URL(l.url); } catch (e) { return; }
+    if (url.origin === location.origin) {
+      // one of your own apps (like The Vis): open it here and tell it how to come back
+      url.searchParams.set("pc", location.origin + location.pathname);
+      a.href = url.toString();
+    } else {
+      a.href = l.url;
+      a.target = "_blank";
+      a.rel = "noopener";
+    }
     a.innerHTML = '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6"/><path d="M20 4l-9 9"/><path d="M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></svg><span><span class="t-name"></span><span class="t-sub"></span></span>';
     a.querySelector(".t-name").textContent = l.name;
-    a.querySelector(".t-sub").textContent = l.sub || "Opens in a new window";
+    a.querySelector(".t-sub").textContent = l.sub || (a.target ? "Opens in a new window" : "");
     box.appendChild(a);
   });
 }
@@ -491,7 +498,7 @@ const LINE_STYLES = [["#1565C0", ""], ["#D93025", "6 4"], ["#2E7D32", "2 4"], ["
 const shortDate = d => { const p = String(d).split("-"); return p.length === 3 ? Number(p[1]) + "/" + Number(p[2]) : d; };
 let dataStudent = "";
 // which bathroom lines to chart (remembered on this phone)
-const BATH_OPTIONS = [["pct", "% voided in toilet"], ["trips", "Trips"], ["voids", "Voided in toilet"], ["accidents", "Accidents"], ["bms", "BMs"]];
+const BATH_OPTIONS = [["pct", "% voided in toilet"], ["trips", "Trips"], ["voids", "Voided in toilet"], ["pullVoids", "Voided in pull-up"], ["accidents", "Accidents"], ["bms", "BMs"]];
 let bathSel = ["pct"];
 try { const v = JSON.parse(store.get("parachute:bathsel") || "null"); if (Array.isArray(v)) bathSel = v; } catch (e) {}
 let bathPickOpen = false;
@@ -582,7 +589,7 @@ function studentSection(d, s){
     const wkT = wk(bt.trips), wkV = wk(bt.voids);
     const pct = wkT ? Math.round(wkV / wkT * 100) : 0;
     const labels = d.days.map(shortDate);
-    const counts = { trips: ["Trips", bt.trips], voids: ["Voided in toilet", bt.voids], bms: ["BMs", bt.bms], accidents: ["Accidents", bt.accidents] };
+    const counts = { trips: ["Trips", bt.trips], voids: ["Voided in toilet", bt.voids], pullVoids: ["Voided in pull-up", bt.pullVoids || bt.trips.map(() => 0)], bms: ["BMs", bt.bms], accidents: ["Accidents", bt.accidents] };
     const pick = BATH_OPTIONS.map(o => '<label><input type="checkbox" data-bs="' + o[0] + '"' + (bathSel.includes(o[0]) ? " checked" : "") + '> ' + o[1] + '</label>').join("");
     const shown = BATH_OPTIONS.filter(o => bathSel.includes(o[0])).map(o => o[1]).join(", ") || "nothing";
     html += '<div class="d-card"><div class="d-title">Bathroom<span class="d-big">' + pct + '%</span></div>' +
@@ -595,7 +602,7 @@ function studentSection(d, s){
     const cs = Object.keys(counts).filter(k => bathSel.includes(k)).map(k => ({ name: counts[k][0], values: counts[k][1] }));
     if (cs.length) html += lineChart(labels, cs, { label: s.initials + " bathroom counts per day" }) + legend(cs);
     html += '<div class="d-stats">' +
-        [["Trips", wkT], ["Voided", wkV], ["BMs", wk(bt.bms)], ["Accidents", wk(bt.accidents)]]
+        [["Trips", wkT], ["In toilet", wkV], ["In pull-up", wk(bt.pullVoids || [])], ["BMs", wk(bt.bms)], ["Accidents", wk(bt.accidents)]]
           .map(x => '<div><b>' + x[1] + '</b><span>' + x[0] + '</span></div>').join("") +
       '</div><div class="d-sub" style="margin-top:4px">this week</div>' +
       '<div class="d-trips">' + bt.recent.slice(0, 5).map(r =>
