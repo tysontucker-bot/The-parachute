@@ -177,6 +177,23 @@
     .s-row .num{ font-weight:900; font-variant-numeric:tabular-nums; text-align:right; min-width:64px; }
     .s-row svg{ flex:none; }
     .empty-note{ color:#333; font-weight:700; }
+    .d-stats{ display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:6px; margin-top:6px; text-align:center; }
+    .d-stats div{ border:3px solid #000; border-radius:12px; padding:6px 2px; }
+    .d-stats b{ display:block; font-size:1.4rem; font-weight:900; }
+    .d-stats span{ font-size:.75rem; font-weight:800; color:#444; }
+    .d-trips{ margin-top:8px; border-top:3px solid #000; }
+    .d-trip{ display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid #ddd; }
+    .d-trip .tw{ flex:none; width:48px; font-size:.8rem; font-weight:800; color:#444; line-height:1.2; }
+    .d-trip .what{ flex:1; font-weight:800; line-height:1.25; }
+    .d-trip .what small{ display:block; font-weight:700; color:#666; font-size:.78rem; }
+    .d-trip .pr{ flex:none; border:2px solid #000; border-radius:999px; padding:2px 8px; font-size:.75rem; font-weight:900; }
+    .d-pick{ margin:6px 0 4px; }
+    .d-pick summary{ list-style:none; display:inline-flex; align-items:center; gap:6px; border:3px solid #000; border-radius:12px; min-height:44px; padding:0 12px; font-weight:900; cursor:pointer; background:#FFF1B8; }
+    .d-pick summary::-webkit-details-marker{ display:none; }
+    .d-pick-box{ border:3px solid #000; border-radius:12px; margin-top:6px; padding:4px 8px; background:#fff; }
+    .d-pick-box label{ display:flex; align-items:center; gap:10px; min-height:44px; font-weight:800; }
+    .d-pick-box input{ width:22px; height:22px; accent-color:#2E7D32; }
+    @media print{ .no-print{ display:none !important; } }
     .d-actions{ display:flex; flex-wrap:wrap; gap:8px; margin:4px 0 8px; }
     #printArea{ display:none; }
     @media print{
@@ -473,6 +490,11 @@ const escHtml = t => String(t).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&
 const LINE_STYLES = [["#1565C0", ""], ["#D93025", "6 4"], ["#2E7D32", "2 4"], ["#6A1B9A", "10 4 2 4"], ["#E65100", "4 2"], ["#00838F", "1 3"]];
 const shortDate = d => { const p = String(d).split("-"); return p.length === 3 ? Number(p[1]) + "/" + Number(p[2]) : d; };
 let dataStudent = "";
+// which bathroom lines to chart (remembered on this phone)
+const BATH_OPTIONS = [["pct", "% voided in toilet"], ["trips", "Trips"], ["voids", "Voided in toilet"], ["accidents", "Accidents"], ["bms", "BMs"]];
+let bathSel = ["pct"];
+try { const v = JSON.parse(store.get("parachute:bathsel") || "null"); if (Array.isArray(v)) bathSel = v; } catch (e) {}
+let bathPickOpen = false;
 
 /* a simple line chart drawn as SVG: labels along the bottom, one line per series */
 function lineChart(labels, series, opts){
@@ -517,6 +539,7 @@ function renderMyData(d, stale){
   let html = '<div class="d-top"><span class="when">' + (stale ? "Updating…" : "Updated " + escHtml(when)) + '</span><button class="d-btn" id="dRefresh">Refresh</button></div>';
   html += '<div class="d-students">' + list.map(x => '<button data-stu="' + escHtml(x.initials) + '" aria-pressed="' + (x.initials === dataStudent) + '" style="background:' + escHtml(x.color) + ';color:' + inkFor(x.color) + '">' + escHtml(x.initials) + '</button>').join("") + '</div>';
 
+  if (d.visError) html += '<p class="empty-note" style="background:#FFF1B8;border:3px solid #000;border-radius:12px;padding:8px 10px">' + escHtml(d.visError) + '</p>';
   html += studentSection(d, s);
   html += '<div class="d-actions"><button class="d-btn" id="dPrintOne">Print ' + escHtml(s.initials) + '</button><button class="d-btn" id="dPrintAll">Print all students</button></div>';
   html += '<button class="d-btn" id="dLock" style="margin-top:6px">Lock My data on this phone</button>';
@@ -524,6 +547,15 @@ function renderMyData(d, stale){
   $("dataBody").querySelectorAll("[data-stu]").forEach(b => b.addEventListener("click", () => { dataStudent = b.dataset.stu; renderMyData(d, false); window.scrollTo(0, 0); }));
   $("dRefresh").addEventListener("click", () => { $("dataBody").querySelector(".when").textContent = "Updating…"; loadMyData(); });
   $("dLock").addEventListener("click", () => { store.set(PIN_KEY, ""); store.set("parachute:mydata", ""); goLaunch(); toast("Locked"); });
+  $("dataBody").querySelectorAll("[data-bs]").forEach(cb => cb.addEventListener("change", () => {
+    const k = cb.dataset.bs;
+    bathSel = cb.checked ? [...new Set([...bathSel, k])] : bathSel.filter(x => x !== k);
+    store.set("parachute:bathsel", JSON.stringify(bathSel));
+    bathPickOpen = true;
+    const y = window.scrollY; renderMyData(d, false); window.scrollTo(0, y);
+  }));
+  const dp = $("dataBody").querySelector(".d-pick");
+  if (dp) dp.addEventListener("toggle", () => { bathPickOpen = dp.open; });
   $("dPrintOne").addEventListener("click", () => printData(d, [s]));
   $("dPrintAll").addEventListener("click", () => printData(d, list));
 }
@@ -541,6 +573,35 @@ function studentSection(d, s){
       s.behaviors.map(b => { const n = b.values.length, wk = b.values.slice(n - 5).reduce((a, c) => a + c, 0), prev = b.values.slice(n - 10, n - 5).reduce((a, c) => a + c, 0);
         return '<tr><td>' + escHtml(b.name) + '</td><td>' + wk + (b.measure === "minutes" ? " min" : "") + '</td><td>' + prev + (b.measure === "minutes" ? " min" : "") + '</td></tr>'; }).join("") +
       '</tbody></table></div>';
+  }
+
+  // bathroom (read from The Vis)
+  if (s.bathroom && s.bathroom.trips.some(v => v > 0)) {
+    const bt = s.bathroom, n = bt.trips.length, sum = a => a.reduce((x, y) => x + y, 0);
+    const wk = a => sum(a.slice(n - 5));
+    const wkT = wk(bt.trips), wkV = wk(bt.voids);
+    const pct = wkT ? Math.round(wkV / wkT * 100) : 0;
+    const labels = d.days.map(shortDate);
+    const counts = { trips: ["Trips", bt.trips], voids: ["Voided in toilet", bt.voids], bms: ["BMs", bt.bms], accidents: ["Accidents", bt.accidents] };
+    const pick = BATH_OPTIONS.map(o => '<label><input type="checkbox" data-bs="' + o[0] + '"' + (bathSel.includes(o[0]) ? " checked" : "") + '> ' + o[1] + '</label>').join("");
+    const shown = BATH_OPTIONS.filter(o => bathSel.includes(o[0])).map(o => o[1]).join(", ") || "nothing";
+    html += '<div class="d-card"><div class="d-title">Bathroom<span class="d-big">' + pct + '%</span></div>' +
+      '<div class="d-sub">voided in the toilet this week · from The Vis</div>' +
+      '<details class="d-pick no-print"' + (bathPickOpen ? " open" : "") + '><summary>Chart: ' + escHtml(shown) + ' <span aria-hidden="true">▾</span></summary><div class="d-pick-box">' + pick + '</div></details>';
+    if (bathSel.includes("pct")) {
+      const daily = bt.trips.map((t, i) => t ? Math.round(bt.voids[i] / t * 100) : null);
+      html += lineChart(labels, [{ name: "% voided in toilet", values: daily }], { yMax: 100, unit: "%", label: s.initials + " percent of trips voided in toilet per day" });
+    }
+    const cs = Object.keys(counts).filter(k => bathSel.includes(k)).map(k => ({ name: counts[k][0], values: counts[k][1] }));
+    if (cs.length) html += lineChart(labels, cs, { label: s.initials + " bathroom counts per day" }) + legend(cs);
+    html += '<div class="d-stats">' +
+        [["Trips", wkT], ["Voided", wkV], ["BMs", wk(bt.bms)], ["Accidents", wk(bt.accidents)]]
+          .map(x => '<div><b>' + x[1] + '</b><span>' + x[0] + '</span></div>').join("") +
+      '</div><div class="d-sub" style="margin-top:4px">this week</div>' +
+      '<div class="d-trips">' + bt.recent.slice(0, 5).map(r =>
+        '<div class="d-trip"><span class="tw">' + shortDate(r.d) + '<br>' + escHtml(r.t) + '</span>' +
+        '<span class="what">' + escHtml(r.what) + '<small>' + escHtml(r.by || "") + '</small></span>' +
+        (r.prompt ? '<span class="pr">' + escHtml(r.prompt) + '</span>' : '') + '</div>').join("") + '</div></div>';
   }
 
   // goals
